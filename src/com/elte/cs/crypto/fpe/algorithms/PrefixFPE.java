@@ -19,31 +19,36 @@ public class PrefixFPE implements FPE {
     private String encryptionKey;
     private List<String> dictionary;
     private List<String> cipherDictionary;
-    
-    public PrefixFPE(String key,List<String> dict) throws Exception {
+
+    public PrefixFPE(String key, List<String> dict) throws Exception {
         this.dictionary = dict;
         this.encryptionKey = key;
         this.loadDictionary(key, dictionary);
-    }
-
-    public void buildDictionaryIndex() throws DictionaryException {
-        if (dictionary == null) {
-            throw new DictionaryNotFoundException();
-        }
-        if (dictionary.isEmpty()) {
-            throw new DictionaryEmptyException();
-        }
-
     }
 
     public void setKey(String key) {
         this.encryptionKey = key;
     }
 
-    public void loadDictionary(String key, List<String> inputDictionary) throws Exception {
-        this.encryptionKey = key;
-        this.dictionary = inputDictionary;
-        createTable(key);
+    public void loadDictionary(String key, List<String> inputDictionary) {
+        try {
+            this.encryptionKey = key;
+            this.dictionary = inputDictionary;
+            createTable(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setup(String key, List<String> inputDictionary) {
+        try {
+            this.encryptionKey = key;
+            this.dictionary = inputDictionary;
+            createTable(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void createTable(String key) throws Exception {
@@ -61,7 +66,7 @@ public class PrefixFPE implements FPE {
             }
 
             Collections.sort(encryptedDictionary);
-            
+
             for (int i = 0; i < dictionary.size(); i++) {
                 String indexedEncryptedWord = encryptedDictionary.get(i);
                 String cipherWord = encryptLookupMap.get(indexedEncryptedWord);
@@ -71,7 +76,7 @@ public class PrefixFPE implements FPE {
         }
 
     }
-    
+
     public String encrypt(String plainText) throws DictionaryException {
         if (cipherDictionary == null) {
             throw new DictionaryNotFoundException();
@@ -120,7 +125,7 @@ public class PrefixFPE implements FPE {
         }
         return null;
     }
-    
+
     @Override
     public String decrypt(String encryptedText, String key) throws DictionaryException {
         if (cipherDictionary == null) {
@@ -140,12 +145,12 @@ public class PrefixFPE implements FPE {
     public String decrypt(String encryptedText, String key, List<String> dictionary) throws DictionaryException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public void printDictionary(){
+
+    public void printDictionary() {
         System.out.println(dictionary);
     }
-    
-    public void printCipherDictionary(){
+
+    public void printCipherDictionary() {
         System.out.println(cipherDictionary);
     }
 

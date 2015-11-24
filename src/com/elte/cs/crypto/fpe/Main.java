@@ -20,7 +20,7 @@ public class Main {
         
         PrefixFPE fpe = new PrefixFPE(encryptionKey,dictionary);
         
-        String plainName = "Sandor";
+        String plainName = "Abram";
         String cipherName = fpe.encrypt(plainName);
         String decryptedName = fpe.decrypt(cipherName);
         System.out.println("plain:"+plainName);
